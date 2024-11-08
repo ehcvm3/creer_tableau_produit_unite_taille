@@ -1,0 +1,7 @@
+# tab-delimited files
+*.tab
+*.tsv
+*.txt
+
+# JSON representation of the questionaire
+document.json
