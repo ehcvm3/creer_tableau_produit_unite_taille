@@ -129,7 +129,7 @@ size_val_lbls <- construct_values_labels(
 # ------------------------------------------------------------------------------
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-# products
+# créer une base des produits à partir du questionnaire Excel de l'EHCVM3
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 produits <- fs::path(here::here(), "data", "in", "ehcvm3", "EHCVM3_UEMOA_MEN_04112024.xlsx") |>
@@ -151,6 +151,10 @@ produits <- fs::path(here::here(), "data", "in", "ehcvm3", "EHCVM3_UEMOA_MEN_041
   ) |>
   tidyr::fill(type_produit, .direction = "down") |>
   dplyr::filter(!is.na(produit_code))
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# créer des vecteurs des produits, globalement et par groupe de produits
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 produits_lbls_ehcvm3 <- stats::setNames(
   object = produits$produit_code,
@@ -213,7 +217,7 @@ boissons_ehcvm3 <- get_products_for_food_group(
 )
 
 # ==============================================================================
-# actualiser
+# actualiser le tableaux de référence
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
@@ -1263,8 +1267,8 @@ lookup_df_character <- lookup_df_labelled |>
       nolabel_to_na = TRUE
     )
   ) |>
-	dplyr::arrange(produit_code, unite_code, taille_code) |>
-	dplyr::select(
+  dplyr::arrange(produit_code, unite_code, taille_code) |>
+  dplyr::select(
     # produit
     produit_code, produit_texte,
     # unité
@@ -1274,7 +1278,7 @@ lookup_df_character <- lookup_df_labelled |>
   )
 
 # ------------------------------------------------------------------------------
-# sauvegarder en format Excel
+# sauvegarder une forme du tableau de référence en format Excel
 # ------------------------------------------------------------------------------
 
 writexl::write_xlsx(
