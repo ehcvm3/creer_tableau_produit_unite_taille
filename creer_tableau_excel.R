@@ -1412,3 +1412,35 @@ writexl::write_xlsx(
   path = fs::path(here::here(), "data", "out", "tableau_de_ref_ehcvm3.xlsx"),
   col_names = TRUE
 )
+
+# ------------------------------------------------------------------------------
+# créer un fichier ressource qui compiles les unités par type de produit
+# ------------------------------------------------------------------------------
+
+# construire le chemin du document
+chemin_document <- here::here(
+  "data", "out",
+  "unites_par_groupe_de_produits.html"
+)
+
+# purger l'ancien document, s'il existe 
+tryCatch(
+  error = function(cnd) {
+    cat("Le document qui compile les unités n'existe pas encore.")
+  },
+  fs::file_delete(chemin_document)
+)
+
+# créer le document
+quarto::quarto_render(
+  input = fs::path(here::here(), "inst", "unites_par_groupe_de_produits.qmd")
+)
+
+# déplacer le document vers le dossier de sortie
+fs::file_move(
+  path = fs::path(
+    here::here(), "inst",
+    "unites_par_groupe_de_produits.html"
+  ),
+  new_path = chemin_document
+)
