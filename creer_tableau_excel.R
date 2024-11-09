@@ -2,84 +2,11 @@
 # installer les packages requis
 # ==============================================================================
 
-# ------------------------------------------------------------------------------
-# définir un programmes de travail pour l'identification et l'installation de
-# programmes absents
-# ------------------------------------------------------------------------------
-
-#' Install package if missing on system
-#' 
-#' @param package Character. Name of package to install.
-#'
-#' @importFrom stringr str_detect str_locate str_sub
-install_if_missing <- function(package) {
-
-  # if package contains a slash for GitHub repo, strip out the package name
-  # and install that package
-  slash_pattern <- "\\/"
-  if (stringr::str_detect(string = package, pattern = slash_pattern)) {
-
-    package_url <- package
-
-    slash_position <- stringr::str_locate(
-      string = package,
-      pattern = slash_pattern
-    )
-    package <- stringr::str_sub(
-      string = package,
-      start = slash_position[[1]] + 1
-    )
-
-    if (!require(package, quietly = TRUE, character.only = TRUE)) {
-      pak::pak(package_url)
-    }
-
-  # otherwises, install the package
-  } else {
-
-    if (!require(package, quietly = TRUE, character.only = TRUE)) {
-      pak::pak(package)
-    }
-
-  }
-
+# installer `{here}` si le package est absent
+if (!base::require("here", quietly = TRUE)) {
+  install.packages("here")
 }
-
-# ------------------------------------------------------------------------------
-# installer les programmes absents
-# ------------------------------------------------------------------------------
-
-packages_requis <- c(
-  "fs", # opérations le système des fichiers
-  "readr", # ingérer les fichiers délimités
-  "dplyr", # manipulation des données
-  "lsms-worldbank/susometa", # extraires des infos de la métadonnée du questionnaire
-  "rlang", # programmation
-  "readxl", # ingérer les fichiers Excel
-  "tidyr", # manipulation de la structure des tableaux
-  "labelled", # manipulation des étiquettes de valeur
-  "writexl" # écrire un fichier Excel
-)
-
-# installer des packages pour faciliter l'installation
-
-# itération et manipulation des listes
-if (!base::require("purrr", quietly = TRUE)) {
-  install.packages("purrr")
-}
-# manipulation des données string
-if (!base::require("stringr", quietly = TRUE)) {
-  install.packages("stringr")
-}
-# méthode d'installation de packages plus rapide, fiable, et moderne
-if (!base::require("pak", quietly = TRUE)) {
-  install.packages("pak")
-}
-
-purrr::walk(
-  .x = packages_requis,
-  .f = ~ install_if_missing(.x)
-)
+source(here::here("R", "01_install_requirements.R"))
 
 # ==============================================================================
 # ingérer les tableaux
@@ -115,75 +42,7 @@ tableaux_df <- dplyr::bind_rows(tableaux_liste) |>
 # define functions for extracting values labels
 # ------------------------------------------------------------------------------
 
-#' Get value labels for a variable
-#'
-#' @param qnr_df Questionnaire data frame
-#' @param varname Atomic character vector.
-#' Variable name as it appears in Designer.
-#'
-#' @return Named numeric vector. Numbers are answer option codes.
-#' Names are labels.
-#'
-#' @importFrom susometa get_answer_options
-#' @importFrom rlang sym
-#' @importFrom stringr str_extract
-get_value_labels <- function(
-  qnr_df,
-  varname
-) {
-
-  products <- qnr_df |>
-    susometa::get_answer_options(varname = !!rlang::sym(varname))
-
-  product_values <- names(products) |>
-    stringr::str_extract(pattern = "(?<=__)[0-9]+$") |>
-    as.numeric()
-
-  product_lbls <- stats::setNames(
-    object = product_values,
-    nm = products
-  )
-
-  return(product_lbls)
-
-}
-
-#' Construct single set of variable labels from several variables
-#'
-#' @description Extract variable labels, combine them, and remove duplicates
-#'
-#' @param qnr_df Questionnaire data frame
-#' @param varnames Character vector. Names of target variables. Use
-#' names as they appear in Designer
-#'
-#' @return Named character vector. Values are answer option codes.
-#' Names are answer option labels.
-#'
-#' @importFrom purrr map list_c
-construct_values_labels <- function(
-  qnr_df,
-  varnames
-) {
-
-  # collect value labels in a list of vectors
-  val_lbl_list <- purrr::map(
-    .x = varnames,
-    .f = ~ get_value_labels(qnr_df = qnr_df, varname = .x)
-  )
-
-  # combine the elements into a single vector
-  val_lbls <- purrr::list_c(val_lbl_list)
-
-  # remove duplicates
-  dup_lbls <- duplicated(val_lbls)
-  val_lbls_unique <- val_lbls[dup_lbls == FALSE]
-
-  # reorder labels in ascending order
-  val_lbls_ordered <- val_lbls_unique[order(val_lbls_unique)]
-
-  return(val_lbls_ordered)
-
-}
+source(here::here("R", "02_manipulate_value_labels.R"))
 
 # ------------------------------------------------------------------------------
 # ECHVM2
@@ -298,49 +157,60 @@ produits_lbls_ehcvm3 <- stats::setNames(
   nm = produits$produit_nom
 )
 
-cereales_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "CÉRÉALES ET PAINS") |>
-  dplyr::pull(produit_code)
+cereales_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "CÉRÉALES ET PAINS"
+)
 
-viandes_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "VIANDE") |>
-  dplyr::pull(produit_code)
+viandes_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "VIANDE"
+)
 
-poissons_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "POISSON ET FRUITS DE MER") |>
-  dplyr::pull(produit_code)
+poissons_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "POISSON ET FRUITS DE MER"
+)
 
-laitier_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "LAIT, FROMAGE ET OEUFS") |>
-  dplyr::pull(produit_code)
+laitier_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "LAIT, FROMAGE ET OEUFS"
+)
 
-huiles_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "HUILES ET GRAISSES") |>
-  dplyr::pull(produit_code)
+huiles_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "HUILES ET GRAISSES"
+)
 
-fruits_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "FRUITS") |>
-  dplyr::pull(produit_code)
+fruits_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "FRUITS"
+)
 
-legumes_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "LÉGUMES") |>
-  dplyr::pull(produit_code)
+legumes_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "LÉGUMES"
+)
 
-leg_tub_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "LEGUMINEUSES ET TUBERCULES") |>
-  dplyr::pull(produit_code)
+leg_tub_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "LEGUMINEUSES ET TUBERCULES"
+)
 
-sucreries_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "SUCRE, MIEL, CHOCOLAT ET CONFISERIE") |>
-  dplyr::pull(produit_code)
+sucreries_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "SUCRE, MIEL, CHOCOLAT ET CONFISERIE"
+)
 
-epices_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "EPICES, CONDIMENTS ET AUTRES") |>
-  dplyr::pull(produit_code)
+epices_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "EPICES, CONDIMENTS ET AUTRES"
+)
 
-boissons_ehcvm3 <- produits |>
-  dplyr::filter(type_produit == "BOISSONS") |>
-  dplyr::pull(produit_code)
+boissons_ehcvm3 <- get_products_for_food_group(
+  product_df = produits,
+  food_group = "BOISSONS"
+)
 
 # ==============================================================================
 # actualiser
