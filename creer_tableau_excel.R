@@ -132,6 +132,32 @@ size_val_lbls <- construct_values_labels(
 # créer une base des produits à partir du questionnaire Excel de l'EHCVM3
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+chemin_qnr_excel <- fs::dir_ls(
+  path = fs::path(here::here(), "01_entree", "ehcvm3"),
+  type = "file",
+  regexp = "boo"
+  # regexp = "(\\.xlsx|\\.xls)$"
+)
+
+if (length(chemin_qnr_excel) == 0) {
+  stop(
+    paste(
+      "Aucun questionnaire EHCVM3 retrouvé.",
+      "Le programme attend un questionnaire Excel avec extension `.xlsx` dans le répertoire `01_entree/ehcvm3/`",
+      sep = "\\n"
+    )
+  )
+} else if (length(chemin_qnr_excel) > 1) {
+  stop(
+    paste(
+      "Plusieurs questionnaires EHCVM3 retrouvés.",
+      "Veuillez supprimer les questionnaires exédentaires dans le répertoire `01_entree/ehcvm3/`",
+      sep = "\\n"
+    )
+
+  )
+}
+
 produits <- fs::path(here::here(), "01_entree", "ehcvm3", "EHCVM3_UEMOA_MEN_04112024.xlsx") |>
   readxl::read_excel(
     sheet = "S7b_Conso_Al",
