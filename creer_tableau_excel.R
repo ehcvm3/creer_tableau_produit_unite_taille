@@ -52,7 +52,7 @@ source(here::here("R", "02_manipulate_value_labels.R"))
 # ingest questionnaire JSON as a data frame
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-qnr_ehcvm2 <- fs::path(here::here(), "data", "in", "ehcvm2", "document.json") |>
+qnr_ehcvm2 <- fs::path(here::here(), "01_entree", "ehcvm2", "document.json") |>
   susometa::parse_questionnaire()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -132,7 +132,7 @@ size_val_lbls <- construct_values_labels(
 # créer une base des produits à partir du questionnaire Excel de l'EHCVM3
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-produits <- fs::path(here::here(), "data", "in", "ehcvm3", "EHCVM3_UEMOA_MEN_04112024.xlsx") |>
+produits <- fs::path(here::here(), "01_entree", "ehcvm3", "EHCVM3_UEMOA_MEN_04112024.xlsx") |>
   readxl::read_excel(
     sheet = "S7b_Conso_Al",
     skip = 16
@@ -1292,10 +1292,7 @@ writexl::write_xlsx(
 # ------------------------------------------------------------------------------
 
 # construire le chemin du document
-chemin_document <- here::here(
-  "data", "out",
-  "unites_par_groupe_de_produits.html"
-)
+chemin_document <- here::here("02_sortie", "unites_par_groupe_de_produits.html")
 
 # purger l'ancien document, s'il existe 
 tryCatch(

@@ -19,7 +19,7 @@ source(here::here("R", "02_manipulate_value_labels.R"))
 
 ```{r}
 #| label: load
-qnr_ehcvm2 <- fs::path(here::here(), "data", "in", "ehcvm2", "document.json") |>
+qnr_ehcvm2 <- fs::path(here::here(), "01_entree", "ehcvm2", "document.json") |>
   susometa::parse_questionnaire()
 
 unit_vars <- c(
