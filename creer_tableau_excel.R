@@ -14,7 +14,7 @@ source(here::here("R", "01_install_requirements.R"))
 
 # faire l'inventaire des tableaux
 chemin_tableaux <- fs::dir_ls(
-  path = fs::path(here::here(), "data", "in", "ehcvm2"),
+  path = fs::path(here::here(), "01_entree", "ehcvm2"),
   type = "file",
   regexp = "\\.tab"
 )
@@ -1309,7 +1309,7 @@ lookup_df_character <- lookup_df_labelled |>
 
 writexl::write_xlsx(
   x = lookup_df_character,
-  path = fs::path(here::here(), "data", "out", "tableau_de_ref_ehcvm3.xlsx"),
+  path = fs::path(here::here(), "02_sortie", "tableau_de_ref_ehcvm3.xlsx"),
   col_names = TRUE
 )
 
