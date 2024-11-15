@@ -135,8 +135,7 @@ size_val_lbls <- construct_values_labels(
 chemin_qnr_excel <- fs::dir_ls(
   path = fs::path(here::here(), "01_entree", "ehcvm3"),
   type = "file",
-  regexp = "boo"
-  # regexp = "(\\.xlsx|\\.xls)$"
+  regexp = "(\\.xlsx|\\.xls)$"
 )
 
 if (length(chemin_qnr_excel) == 0) {
@@ -158,7 +157,7 @@ if (length(chemin_qnr_excel) == 0) {
   )
 }
 
-produits <- fs::path(here::here(), "01_entree", "ehcvm3", "EHCVM3_UEMOA_MEN_04112024.xlsx") |>
+produits <- chemin_qnr_excel |>
   readxl::read_excel(
     sheet = "S7b_Conso_Al",
     skip = 16
