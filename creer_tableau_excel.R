@@ -135,7 +135,7 @@ size_val_lbls <- construct_values_labels(
 chemin_qnr_excel <- fs::dir_ls(
   path = fs::path(here::here(), "01_entree", "ehcvm3"),
   type = "file",
-  regexp = "(\\.xlsx|\\.xls)$"
+  regexp = "(\\.xlsx|\\.xls|\\.xlsm)$"
 )
 
 if (length(chemin_qnr_excel) == 0) {
