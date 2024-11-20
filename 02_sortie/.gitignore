@@ -2,5 +2,8 @@
 *.xlsm
 *.xlsx
 
+# tab-delimited files
+*.tab
+
 # HTML document
 *.html
