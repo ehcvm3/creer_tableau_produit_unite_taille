@@ -139,22 +139,25 @@ chemin_qnr_excel <- fs::dir_ls(
 )
 
 if (length(chemin_qnr_excel) == 0) {
-  stop(
-    paste(
-      "Aucun questionnaire EHCVM3 retrouvé.",
-      "Le programme attend un questionnaire Excel avec extension `.xlsx` dans le répertoire `01_entree/ehcvm3/`",
-      sep = "\\n"
-    )
-  )
-} else if (length(chemin_qnr_excel) > 1) {
-  stop(
-    paste(
-      "Plusieurs questionnaires EHCVM3 retrouvés.",
-      "Veuillez supprimer les questionnaires exédentaires dans le répertoire `01_entree/ehcvm3/`",
-      sep = "\\n"
-    )
 
+  cli::cli_abort(
+    message = c(
+      "x" = "Aucun questionnaire EHCVM3 retrouvé.",
+      "i" = "Le programme attend un questionnaire Excel avec extension `.xlsx` dans le répertoire `01_entree/ehcvm3/`",
+      "i" = "Veuillez copier un exemplaire adapté du questionnaire dans ce dossier."
+    )
   )
+
+} else if (length(chemin_qnr_excel) > 1) {
+
+  cli::cli_abort(
+    message = c(
+      "x" = "Plusieurs questionnaires EHCVM3 retrouvés.",
+      "i" = "Veuillez supprimer les questionnaires exédentaires dans le répertoire `01_entree/ehcvm3/`",
+      chemin_qnr_excel
+    )
+  )
+
 }
 
 produits <- chemin_qnr_excel |>

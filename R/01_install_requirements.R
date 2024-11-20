@@ -51,6 +51,7 @@ packages_requis <- c(
   "dplyr", # manipulation des données
   "lsms-worldbank/susometa", # extraires des infos de la métadonnée du questionnaire
   "rlang", # programmation
+  "cli", # afficher des messages d'erreur plus lisible
   "readxl", # ingérer les fichiers Excel
   "tidyr", # manipulation de la structure des tableaux
   "labelled", # manipulation des étiquettes de valeur
