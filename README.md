@@ -46,7 +46,7 @@ Ouvrir pour voir plus de détails 👁️
 
 #### RTools
 
-Required for the Windows operating system.
+Nécessaire pour le système d'exploitation Windows
 
 - Suivre ce [lien](https://cran.r-project.org/)
 - Cliquer sur `Windows`
