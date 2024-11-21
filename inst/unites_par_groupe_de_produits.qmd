@@ -15,6 +15,19 @@ execute:
 
 source(here::here("R", "02_manipulate_value_labels.R"))
 
+creer_modalites_texte <- function(df) {
+
+  modalites_texte <- df |>
+    dplyr::mutate(
+      copy_paste = glue::glue("{unite_texte}...{unite_code}")
+    ) |>
+    dplyr::pull(copy_paste) |>
+    glue::glue_collapse(sep = "\n")
+
+  return(modalites_texte)
+
+}
+
 ```
 
 ```{r}
@@ -69,77 +82,219 @@ unites_all
 
 ### Céréales
 
+::: {.panel-tabset}
+
+### Tableau
+
 ```{r}
 #| label: cereales
 gt::gt(unites_tbls[[1]])
 ```
 
+### Texte à copier
+
+```{r}
+#| label: cereales modalites
+creer_modalites_texte(unites_tbls[[1]])
+```
+
+:::
+
+
 ### Viandes
+
+::: {.panel-tabset}
+
+### Tableau
 
 ```{r}
 #| label: viandes
 gt::gt(unites_tbls[[2]])
 ```
 
+### Texte à copier
+
+```{r}
+#| label: viandes modalites
+creer_modalites_texte(unites_tbls[[2]])
+```
+
+:::
+
 ### Poissons et fruits de mer
+
+::: {.panel-tabset}
+
+### Tableau
 
 ```{r}
 #| label: poissons
 gt::gt(unites_tbls[[3]])
 ```
 
+### Texte à copier
+
+```{r}
+#| label: poissons modalites
+creer_modalites_texte(unites_tbls[[3]])
+```
+
+:::
+
 ### Lait, fromage, et oeufs
+
+::: {.panel-tabset}
+
+### Tableau
 
 ```{r}
 #| label: laitier
 gt::gt(unites_tbls[[4]])
 ```
 
+### Texte à copier
+
+```{r}
+#| label: laitier modalites
+creer_modalites_texte(unites_tbls[[4]])
+```
+:::
+
 ### Huiles et graisses
+
+::: {.panel-tabset}
+
+### Tableau
 
 ```{r}
 #| label: huiles
 gt::gt(unites_tbls[[5]])
 ```
 
+### Texte à copier
+
+```{r}
+#| label: huiles modalites
+creer_modalites_texte(unites_tbls[[5]])
+```
+:::
+
 ### Fruits
+
+::: {.panel-tabset}
+
+### Tableau
 
 ```{r}
 #| label: fruits
 gt::gt(unites_tbls[[6]])
 ```
 
+### Texte à copier
+
+```{r}
+#| label: fruits modalites
+creer_modalites_texte(unites_tbls[[6]])
+```
+
+:::
+
 ### Légumes
+
+::: {.panel-tabset}
+
+### Tableau
 
 ```{r}
 #| label: legumes
 gt::gt(unites_tbls[[7]])
 ```
 
+### Texte à copier
+
+```{r}
+#| label: légumes modalites
+creer_modalites_texte(unites_tbls[[7]])
+```
+
+:::
+
 ### Légumineuses et tubercules
+
+::: {.panel-tabset}
+
+### Tableau
 
 ```{r}
 #| label: leg_tub
 gt::gt(unites_tbls[[8]])
 ```
 
+### Texte à copier
+
+```{r}
+#| label: légumineuses et tubercules modalites
+creer_modalites_texte(unites_tbls[[8]])
+```
+
+:::
+
 ### Sucre, miel, chocolat, et confiserie
+
+::: {.panel-tabset}
+
+### Tableau
 
 ```{r}
 #| label: sucreries
 gt::gt(unites_tbls[[9]])
 ```
 
+### Texte à copier
+
+```{r}
+#| label: sucreries modalites
+creer_modalites_texte(unites_tbls[[9]])
+```
+
+:::
+
 ### Épices, condiments, et autres
+
+::: {.panel-tabset}
+
+### Tableau
 
 ```{r}
 #| label: epices
 gt::gt(unites_tbls[[10]])
 ```
 
+### Texte à copier
+
+```{r}
+#| label: épices modalites
+creer_modalites_texte(unites_tbls[[10]])
+```
+
+:::
+
 ### Boissons
+
+::: {.panel-tabset}
+
+### Tableau
 
 ```{r}
 #| label: boissons
 gt::gt(unites_tbls[[11]])
 ```
+
+### Texte à copier
+
+```{r}
+#| label: boissons modalites
+creer_modalites_texte(unites_tbls[[11]])
+```
+
+:::
