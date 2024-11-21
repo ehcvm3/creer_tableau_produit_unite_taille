@@ -60,6 +60,10 @@ unites_tbls <- purrr::map(
 
 ## Toutes les unité ensemble
 
+::: {.panel-tabset}
+
+### Tableau
+
 ```{r}
 #| label: all food groups
 unites_all_groups_tbl <- dplyr::bind_rows(unites_tbls) |>
@@ -77,6 +81,16 @@ unites_all <- unites_all_groups_tbl |>
 
 unites_all
 ```
+
+### Texte à copier
+
+```{r}
+#| label: all food groups texte
+creer_modalites_texte(unites_all_groups_tbl)
+```
+
+:::
+
 
 ## Unités par groupe de produits
 
