@@ -122,7 +122,7 @@ Comme le questionnaire CAPI peut ne pas être à jour, on exploitera la version 
 Pour ce faire :
 
 - Sauvegarder la version pays
-- Sauvegarder sous format `xlsx` si le fichier a une extension `xlsm`
+- Sauvegarder sous format `xlsx`, `xlsm`, ou `xls`
 
 ## Emploi 👩‍💻
 
