@@ -9,15 +9,127 @@ if (!base::require("here", quietly = TRUE)) {
 source(here::here("R", "01_install_requirements.R"))
 
 # ==============================================================================
-# ingérer les tableaux
+# valider les entrées du programme
 # ==============================================================================
 
-# faire l'inventaire des tableaux
+# ------------------------------------------------------------------------------
+# tableaux de l'EHCVM2
+# ------------------------------------------------------------------------------
+
 chemin_tableaux <- fs::dir_ls(
   path = fs::path(here::here(), "01_entree", "ehcvm2"),
   type = "file",
-  regexp = "\\.tab"
+  regexp = "(\\.tab|\\.txt|\\.tsv)"
 )
+
+# existence de tableaux
+if (length(chemin_tableaux) == 0) {
+
+  url_telecharger <- "https://ehcvm3.github.io/atelier_capi_2024/slides/creer_tableau_unites_taillles/creer_tableau_unites_tailles.html#/t%C3%A9l%C3%A9charger-les-anciens-tableaux-de-lehcvm"
+
+  cli::cli_abort(
+    message = c(
+      "x" = "Aucun tableau de référence retrouvé.",
+      "i" = paste0(
+        "Le programme a besoin d'anciens tableaux de référence",
+        "afin de créer un nouveau tableau avec un contenu actualisé."
+      ),
+      "i" = paste0(
+        "Veuillez télécharger les tableaux de la dernière enquête EHCVM. ", 
+        "Voir ici pour plus de détails : ",
+        "{.url {url_telecharger}}"
+      )
+    )
+  )
+
+}
+
+# nombre de tableaux
+if (length(chemin_tableaux) != 0 & length(chemin_tableaux) < 11) {
+
+  cli::cli_warn(
+    message = c(
+      "!" = "Moins de 11 tableaux de référence retrouvés.",
+      "i" = paste0(
+        "Dans le passé, on avait 11 tableaux de référence, ",
+        "un tableau pour chacun des 11 groupes alimentaires."
+      ),
+      "i" = paste0(
+        "Voici quelques situations possibles. ",
+        "1) Ce résultat est attendu. Aucune action. ",
+        "2) Ce résultat est inattendu. Voir si un tableau ou plus est absent ",
+        "ou a une extension inattendue ",
+        "(i.e., pas parmi ces extensions attendues pqr le programme: ",
+        "`.tab`, `.txt`, `.tsv`)"
+      ),
+      "Voici les tableaux retrouvés : ",
+      fs::path_file(chemin_tableaux)
+    )
+  )
+}
+
+# ------------------------------------------------------------------------------
+# fichier JSON de l'EHCVM2
+# ------------------------------------------------------------------------------
+
+chemin_qnr_json <- fs::path(here::here(), "01_entree", "ehcvm2", "document.json") 
+
+if (!fs::file_exists(chemin_qnr_json)) {
+
+  url_json <- "https://ehcvm3.github.io/atelier_capi_2024/slides/creer_tableau_unites_taillles/creer_tableau_unites_tailles.html#/obtenir-le-questionnaire-ehcvm2-en-format-json"
+
+  cli::cli_abort(
+    message = c(
+      "x" = "Aucun représentation du questionnaire en JSON retrouvé",
+      "i" = paste0(
+        "Le programme a besoin du questionnaire de l'EHCVM2 en format JSON ",
+        "afin d'étiquetter les unités et les tailles."
+      ),
+      "i" = paste0(
+        "Veuillez obtenir ce fichier par l'une des méthodes indiquées ici : ",
+        "{.url {url_json}}"
+      )
+    )
+
+  )
+
+}
+
+# ------------------------------------------------------------------------------
+# questionnaire Excel de l'EHCVM3
+# ------------------------------------------------------------------------------
+
+chemin_qnr_excel <- fs::dir_ls(
+  path = fs::path(here::here(), "01_entree", "ehcvm3"),
+  type = "file",
+  regexp = "(\\.xlsx|\\.xls|\\.xlsm)$"
+)
+
+if (length(chemin_qnr_excel) == 0) {
+
+  cli::cli_abort(
+    message = c(
+      "x" = "Aucun questionnaire EHCVM3 retrouvé.",
+      "i" = "Le programme attend un questionnaire Excel avec extension `.xlsx` dans le répertoire `01_entree/ehcvm3/`",
+      "i" = "Veuillez copier un exemplaire adapté du questionnaire dans ce dossier."
+    )
+  )
+
+} else if (length(chemin_qnr_excel) > 1) {
+
+  cli::cli_abort(
+    message = c(
+      "x" = "Plusieurs questionnaires EHCVM3 retrouvés.",
+      "i" = "Veuillez supprimer les questionnaires exédentaires dans le répertoire `01_entree/ehcvm3/`",
+      chemin_qnr_excel
+    )
+  )
+
+}
+
+# ==============================================================================
+# ingérer les tableaux
+# ==============================================================================
 
 tableaux_liste <- purrr::map(
   .x = chemin_tableaux,
@@ -52,7 +164,7 @@ source(here::here("R", "02_manipulate_value_labels.R"))
 # ingest questionnaire JSON as a data frame
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-qnr_ehcvm2 <- fs::path(here::here(), "01_entree", "ehcvm2", "document.json") |>
+qnr_ehcvm2 <- chemin_qnr_json |>
   susometa::parse_questionnaire()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -131,34 +243,6 @@ size_val_lbls <- construct_values_labels(
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # créer une base des produits à partir du questionnaire Excel de l'EHCVM3
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-chemin_qnr_excel <- fs::dir_ls(
-  path = fs::path(here::here(), "01_entree", "ehcvm3"),
-  type = "file",
-  regexp = "(\\.xlsx|\\.xls|\\.xlsm)$"
-)
-
-if (length(chemin_qnr_excel) == 0) {
-
-  cli::cli_abort(
-    message = c(
-      "x" = "Aucun questionnaire EHCVM3 retrouvé.",
-      "i" = "Le programme attend un questionnaire Excel avec extension `.xlsx` dans le répertoire `01_entree/ehcvm3/`",
-      "i" = "Veuillez copier un exemplaire adapté du questionnaire dans ce dossier."
-    )
-  )
-
-} else if (length(chemin_qnr_excel) > 1) {
-
-  cli::cli_abort(
-    message = c(
-      "x" = "Plusieurs questionnaires EHCVM3 retrouvés.",
-      "i" = "Veuillez supprimer les questionnaires exédentaires dans le répertoire `01_entree/ehcvm3/`",
-      chemin_qnr_excel
-    )
-  )
-
-}
 
 produits <- chemin_qnr_excel |>
   readxl::read_excel(
