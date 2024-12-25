@@ -780,8 +780,8 @@ laitier_renum_df <- laitier_df |>
 
 # lait caillé/yaourt -> lait caillé, yaourt
 lait_caille_yaourt <- dplyr::filter(laitier_df, produit_code == 53)
-lait_caille <- dplyr::mutate(laitier_df, produit_code = 89)
-lait_yaourt <- dplyr::mutate(laitier_df, produit_code = 90)
+lait_caille <- dplyr::mutate(lait_caille_yaourt, produit_code = 121)
+lait_yaourt <- dplyr::mutate(lait_caille_yaourt, produit_code = 122)
 
 # lait et farines pour bébé -> lait pour bébé, farines pour bébé
 lait_farine <- dplyr::filter(laitier_df, produit_code == 58)
