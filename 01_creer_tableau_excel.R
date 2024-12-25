@@ -388,17 +388,17 @@ cereales_renum_df <- cereales_df |>
       produit_code == 9 ~ 10, # Blé
       produit_code == 10 ~ 11, # Fonio
       produit_code == 11 ~ 12, # Autres céréales
-      produit_code == 12 ~ 13, # Farine de maïs
-      produit_code == 13 ~ 14, # semoule de mais
-      produit_code == 14 ~ 15, # Farine de mil
-      produit_code == 15 ~ 16, # Semoule de mil
-      produit_code == 16 ~ 17, # Farine de blé locale ou importée
-      produit_code == 17 ~ 18, # Semoule de blé
-      produit_code == 18 ~ 19, # Autres farines de céréales
-      produit_code == 19 ~ 20, # Autres semoules de céréales
-      produit_code == 23 ~ 30, # Croissants -> viennoisseries
-      produit_code == 24 ~ 31, # Biscuits
-      produit_code == 25 ~ 32, # Gâteaux
+      produit_code == 12 ~ 14, # Farine de maïs
+      produit_code == 13 ~ 15, # Semoule de mais
+      produit_code == 14 ~ 17, # Farine de mil
+      produit_code == 15 ~ 18, # Semoule de mil
+      produit_code == 16 ~ 19, # Farine de blé locale ou importée
+      produit_code == 17 ~ 20, # Semoule de blé
+      produit_code == 18 ~ 21, # Autres farines de céréales
+      produit_code == 19 ~ 22, # Autres semoules de céréales
+      produit_code == 23 ~ 33, # Croissants -> viennoiseries
+      produit_code == 24 ~ 34, # Biscuits
+      produit_code == 25 ~ 35, # Gâteaux
       TRUE ~ produit_code
     )
   )
@@ -409,27 +409,32 @@ cereales_renum_df <- cereales_df |>
 
 # pâtes alimentaires -> plusiers pâtes spécifiques
 pates_alimentaires <- dplyr::filter(cereales_df, produit_code == 20)
-macaroni <- dplyr::mutate(pates_alimentaires, produit_code = 21)
-spaghettis <- dplyr::mutate(pates_alimentaires, produit_code = 22)
-vermicelles <- dplyr::mutate(pates_alimentaires, produit_code = 23)
-autres_pates_alimentaires <- dplyr::mutate(pates_alimentaires, produit_code = 24)
+macaroni <- dplyr::mutate(pates_alimentaires, produit_code = 23)
+spaghettis <- dplyr::mutate(pates_alimentaires, produit_code = 24)
+vermicelles <- dplyr::mutate(pates_alimentaires, produit_code = 25)
+autres_pates_alimentaires <- dplyr::mutate(pates_alimentaires, produit_code = 26)
 
 # pain moderne -> plusiers pains spécifiques
 pain_moderne <- dplyr::filter(cereales_df, produit_code == 21)
-pain_moderne_1 <- dplyr::mutate(pain_moderne, produit_code = 25)
-pain_moderne_2 <- dplyr::mutate(pain_moderne, produit_code = 26)
+pain_moderne_1 <- dplyr::mutate(pain_moderne, produit_code = 27)
+pain_moderne_2 <- dplyr::mutate(pain_moderne, produit_code = 28)
 
 # pain traditionnel -> plusiers pains spécifiques
 pain_traditionnel <- dplyr::filter(cereales_df, produit_code == 22)
-pain_traditionnel_1 <- dplyr::mutate(pain_traditionnel, produit_code = 27)
-pain_traditionnel_2 <- dplyr::mutate(pain_traditionnel, produit_code = 28)
+pain_traditionnel_1 <- dplyr::mutate(pain_traditionnel, produit_code = 29)
+pain_traditionnel_2 <- dplyr::mutate(pain_traditionnel, produit_code = 30)
 
 # beignets/galettes -> [beignets, ...] , galettes
 beignets_galettes <- dplyr::filter(cereales_df, produit_code == 26)
-beignet_boulangerie <- dplyr::mutate(beignets_galettes, produit_code = 33)
-beignet_tradit <- dplyr::mutate(beignets_galettes, produit_code = 34)
-beignet_mais_mil <- dplyr::mutate(beignets_galettes, produit_code = 35)
-galettes <- dplyr::mutate(beignets_galettes, produit_code = 36)
+beignet_boulangerie <- dplyr::mutate(beignets_galettes, produit_code = 36)
+beignet_tradit <- dplyr::mutate(beignets_galettes, produit_code = 37)
+beignet_mais_mil <- dplyr::mutate(beignets_galettes, produit_code = 38)
+galettes <- dplyr::mutate(beignets_galettes, produit_code = 39)
+
+# farine de riz est probablement comme la farine de maïs
+farine_riz <- cereales_df |>
+  dplyr::filter(produit_code == 12) |>
+  dplyr::mutate(produit_code = 13)
 
 # ajouter un 3ième riz importé
 riz_importe_3 <- cereales_df |>
@@ -449,6 +454,8 @@ cereales_df_echvm <- cereales_renum_df |>
     pain_traditionnel_1, pain_traditionnel_2,
     # beignets/galettes
     beignet_boulangerie, beignet_tradit, beignet_mais_mil, galettes,
+    # farine de riz
+    farine_riz,
     # riz
     riz_importe_3
   )
@@ -485,7 +492,6 @@ viandes_renum_indices <- c(
   28, # Viande de chameau
   29, # Viande de mouton
   30, # Viande de chèvre
-  32, # Viande de porc
   33, # Poulet sur pied
   171, # Autre volaille sur pied
   35, # Viande d'autres volailles domestiques  
@@ -497,15 +503,14 @@ viandes_renum_df <- viandes_df |>
   dplyr::filter(produit_code %in% viandes_renum_indices) |>
   dplyr::mutate(
     produit_code = dplyr::case_when(
-      produit_code == 28 ~ 44, # Viande de chameau
-      produit_code == 29 ~ 42, # Viande de mouton
-      produit_code == 30 ~ 43, # Viande de chèvre
-      produit_code == 32 ~ 45, # Viande de porc
-      produit_code == 33 ~ 60, # Poulet sur pied
-      produit_code == 171 ~ 62, # Autre volaille sur pied
-      produit_code == 35 ~ 59, # Viande d'autres volailles domestiques
-      produit_code == 37 ~ 64, # Viande séchée (boeuf, mouton, chameau)
-      produit_code == 39 ~ 68, # Autres viandes n.d.a.
+      produit_code == 28 ~ 56, # Viande de chameau
+      produit_code == 29 ~ 48, # Viande de mouton
+      produit_code == 30 ~ 49, # Viande de chèvre
+      produit_code == 33 ~ 75, # Poulet sur pieds
+      produit_code == 171 ~ 78, # Autre volaille domestique sur pied
+      produit_code == 35 ~ 74, # Viande d'autres volailles domestiques
+      produit_code == 37 ~ 80, # Viande séchée (boeuf, mouton, chameau)
+      produit_code == 39 ~ 84, # Autres viandes n.d.a.
       TRUE ~ produit_code
     )
   )
@@ -516,36 +521,57 @@ viandes_renum_df <- viandes_df |>
 
 # viande de boeuf -> viande de boeuf par type de pièce
 boeuf <- dplyr::filter(viandes_df, produit_code == 27)
-boeuf_filet <- dplyr::mutate(boeuf, produit_code = 37)
-boeuf_cote <- dplyr::mutate(boeuf, produit_code = 38)
-boeuf_cote <- dplyr::mutate(boeuf, produit_code = 38)
-boeuf_sans_os <- dplyr::mutate(boeuf, produit_code = 39)
-boeuf_avec_os <- dplyr::mutate(boeuf, produit_code = 40)
-boeuf_tripes <- dplyr::mutate(boeuf, produit_code = 41)
+boeuf_filet <- dplyr::mutate(boeuf, produit_code = 40)
+boeuf_cote <- dplyr::mutate(boeuf, produit_code = 41)
+boeuf_pattes <- dplyr::mutate(boeuf, produit_code = 42)
+boeuf_peau <- dplyr::mutate(boeuf, produit_code = 43)
+boeuf_queue <- dplyr::mutate(boeuf, produit_code = 44)
+boeuf_sans_os <- dplyr::mutate(boeuf, produit_code = 45)
+boeuf_avec_os <- dplyr::mutate(boeuf, produit_code = 46)
+
+# viande de porc -> viande de porc par type de pièce
+porc <- dplyr::filter(viandes_df, produit_code == 32)
+porc_cote <- dplyr::mutate(porc, produit_code = 51)
+porc_pattes <- dplyr::mutate(porc, produit_code = 52)
+porc_queue <- dplyr::mutate(porc, produit_code = 53)
+porc_autre <- dplyr::mutate(porc, produit_code = 54)
 
 # viande de poulet -> viande de poulet par type de pièce
 poulet <- dplyr::filter(viandes_df, produit_code == 34)
-poulet_entier <- dplyr::mutate(viandes_df, produit_code = 55)
-poulet_cuisses <- dplyr::mutate(viandes_df, produit_code = 56)
-poulet_ailes <- dplyr::mutate(viandes_df, produit_code = 57)
-poulet_autre_mourceaux <- dplyr::mutate(viandes_df, produit_code = 58)
+poulet_entier <- dplyr::mutate(poulet, produit_code = 69)
+poulet_cuisses <- dplyr::mutate(poulet, produit_code = 70)
+poulet_ailes <- dplyr::mutate(poulet, produit_code = 71)
+poulet_autre_mourceaux <- dplyr::mutate(poulet, produit_code = 72)
 
-# gibier -> plusieurs gibiers spécifiques
+# gibier -> plusieurs gibiers spécifiques et fumé/seché
 gibier <- dplyr::filter(viandes_df, produit_code == 38)
-gros_gibier <- dplyr::mutate(gibier, produit_code = 50)
-petits_gibier <- dplyr::mutate(gibier, produit_code = 51)
-gibier_a_plumes <- dplyr::mutate(gibier, produit_code = 52)
-autres_gibier <- dplyr::mutate(gibier, produit_code = 53)
+# gibier frais
+gros_gibier <- dplyr::mutate(gibier, produit_code = 61)
+petits_gibier <- dplyr::mutate(gibier, produit_code = 62)
+gibier_a_plumes <- dplyr::mutate(gibier, produit_code = 63)
+autres_gibier <- dplyr::mutate(gibier, produit_code = 64)
+# gibier fumé
+gibier_fume <- dplyr::mutate(gibier, produit_code = 65)
+petit_gibier_fume <- dplyr::mutate(gibier, produit_code = 66)
+gibier_plume_fume <- dplyr::mutate(gibier, produit_code = 67)
 
 # abats -> plusieurs abats spécifiques
 abats <- dplyr::filter(viandes_df, produit_code == 31)
-abats_volaille <- dplyr::mutate(abats, produit_code = 63)
+abats_boeuf <- dplyr::mutate(abats, produit_code = 47)
+abats_chevre <- dplyr::mutate(abats, produit_code = 50)
+abats_porc <- dplyr::mutate(abats, produit_code = 55)
+abats_volaille <- dplyr::mutate(abats, produit_code = 79)
 
 # charcuterie -> plusieurs variétés
 charcuterie <- dplyr::filter(viandes_df, produit_code == 36)
-jambon <- dplyr::mutate(charcuterie, produit_code = 65)
-saucisson <- dplyr::mutate(charcuterie, produit_code = 66)
-conserves_viande <- dplyr::mutate(charcuterie, produit_code = 67)
+jambon <- dplyr::mutate(charcuterie, produit_code = 81)
+saucisson <- dplyr::mutate(charcuterie, produit_code = 82)
+conserves_viande <- dplyr::mutate(charcuterie, produit_code = 83)
+
+# poulet sur pieds -> [voillaile] sur pieds
+poulet_sur_pieds <- dplyr::filter(viandes_df, produit_code == 33)
+pintarde_sur_pieds <- dplyr::mutate(poulet_sur_pieds, produit_code == 76)
+canard_sur_pieds <- dplyr::mutate(poulet_sur_pieds, produit_code == 77)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # rassembler le tout
@@ -554,13 +580,19 @@ conserves_viande <- dplyr::mutate(charcuterie, produit_code = 67)
 viandes_df_echvm <- viandes_renum_df |>
   dplyr::bind_rows(
     # viande de boeuf
-    boeuf_filet, boeuf_cote, boeuf_cote, boeuf_sans_os, boeuf_avec_os, boeuf_tripes,
+    boeuf_filet, boeuf_cote, boeuf_pattes, boeuf_peau, boeuf_queue,
+    boeuf_sans_os, boeuf_avec_os,
+    # viande de porc
+    porc_cote, porc_pattes, porc_queue, porc_autre,
     # viande de poulet
-    poulet_entier, poulet_cuisses, poulet_ailes, poulet_autre_mourceaux, 
+    poulet_entier, poulet_cuisses, poulet_ailes, poulet_autre_mourceaux,
     # gibier
     gros_gibier, petits_gibier, gibier_a_plumes, autres_gibier,
+    gibier_fume, petit_gibier_fume, gibier_plume_fume,
+    # autres volailles sur pieds
+    pintarde_sur_pieds, canard_sur_pieds,
     # abats
-    abats_volaille,
+    abats_boeuf, abats_chevre, abats_porc, abats_volaille,
     # charcuterie
     jambon, saucisson, conserves_viande
   )
@@ -602,7 +634,6 @@ poissons_renum_indices <- c(
   45, # Poisson fumé type 2
   172, # Poisson fumé type 3
   47, # Crabes
-  48, # Crevettes/Gambas fraîches
   49, # Crevettes séchées
   173, # Escargots
   50, # Autres fruits de mer
@@ -613,19 +644,18 @@ poissons_renum_df <- poissons_df |>
   dplyr::filter(produit_code %in% poissons_renum_indices) |>
   dplyr::mutate(
     produit_code = dplyr::case_when(
-      produit_code == 40 ~ 69, # Poisson frais type 1
-      produit_code == 41 ~ 70, # Poisson frais type 2
-      produit_code == 42 ~ 71, # Poisson frais type 3
-      produit_code == 43 ~ 72, # Poisson frais type 4
-      produit_code == 44 ~ 73, # Poisson fumé type 1
-      produit_code == 45 ~ 74, # Poisson fumé type 2
-      produit_code == 172 ~ 75, # Poissons fumé type 3
-      produit_code == 47 ~ 79, # Crabes
-      produit_code == 48 ~ 80, # Crevettes/Gambas fraîches
-      produit_code == 49 ~ 81, # Crevettes séchées
-      produit_code == 173 ~ 83, # Escargots
-      produit_code == 50 ~ 82, # Autres fruits de mer
-      produit_code == 51 ~ 84, # Conserves de poisson
+      produit_code == 40 ~ 85, # Poisson frais type 1
+      produit_code == 41 ~ 86, # Poisson frais type 2
+      produit_code == 42 ~ 87, # Poisson frais type 3
+      produit_code == 43 ~ 88, # Poisson frais type 4
+      produit_code == 44 ~ 96, # Poisson fumé type 1
+      produit_code == 45 ~ 97, # Poisson fumé type 2
+      produit_code == 172 ~ 98, # Poissons fumé type 3
+      produit_code == 47 ~ 108, # Crabes
+      produit_code == 49 ~ 111, # Crevettes séchées
+      produit_code == 173 ~ 113, # Escargots
+      produit_code == 50 ~ 112, # Autres fruits de mer
+      produit_code == 51 ~ 114, # Conserves de poisson
       TRUE ~ produit_code
     )
   )
@@ -634,11 +664,39 @@ poissons_renum_df <- poissons_df |>
 # créer de nouveaux produits
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-# créer 3 postes de poisson séché
+# créer 7 poste supplémentaires de poisson frais
+poisson_frais <- dplyr::filter(poissons_df, produit_code %in% c(40:43)) |>
+  dplyr::distinct(unite_code, taille_code, .keep_all = TRUE) |>
+  dplyr::mutate(produit_code == 1)
+poisson_frais_5   <- dplyr::mutate(poisson_frais, produit_code = 89)
+poisson_frais_6   <- dplyr::mutate(poisson_frais, produit_code = 90)
+poisson_frais_7   <- dplyr::mutate(poisson_frais, produit_code = 91)
+poisson_frais_8   <- dplyr::mutate(poisson_frais, produit_code = 92)
+poisson_frais_9   <- dplyr::mutate(poisson_frais, produit_code = 93)
+poisson_frais_10  <- dplyr::mutate(poisson_frais, produit_code = 94)
+poisson_frais_11  <- dplyr::mutate(poisson_frais, produit_code = 95)
+
+# créer 5 postes supplémentaires de poisson fumé
+poisson_fume <- dplyr::filter(poissons_df, produit_code %in% c(44, 45)) |>
+  dplyr::distinct(unite_code, taille_code, .keep_all = TRUE) |>
+  dplyr::mutate(produit_code == 1)
+poisson_fume_4   <- dplyr::mutate(poisson_fume, produit_code = 99)
+poisson_fume_5   <- dplyr::mutate(poisson_fume, produit_code = 100)
+poisson_fume_6   <- dplyr::mutate(poisson_fume, produit_code = 101)
+poisson_fume_7   <- dplyr::mutate(poisson_fume, produit_code = 102)
+poisson_fume_8   <- dplyr::mutate(poisson_fume, produit_code = 103)
+
+# créer 4 postes de poisson séché
 poisson_seche <- dplyr::filter(poissons_df, produit_code == 46)
-poisson_seche_1 <- dplyr::mutate(poisson_seche, produit_code = 76)
-poisson_seche_2 <- dplyr::mutate(poisson_seche, produit_code = 77)
-poisson_seche_3 <- dplyr::mutate(poisson_seche, produit_code = 78)
+poisson_seche_1 <- dplyr::mutate(poisson_seche, produit_code = 104)
+poisson_seche_2 <- dplyr::mutate(poisson_seche, produit_code = 105)
+poisson_seche_3 <- dplyr::mutate(poisson_seche, produit_code = 106)
+poisson_seche_4 <- dplyr::mutate(poisson_seche, produit_code = 107)
+
+# éclater crevettes fraiches en 2 postes
+crevettes_fraiches <- dplyr::filter(poissons_df, produit_code == 48)
+crevettes_fraiches_locales <- dplyr::mutate(crevettes_fraiches, produit_code = 109)
+crevettes_fraiches_importees <- dplyr::mutate(crevettes_fraiches, produit_code = 110)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # rassembler le tout
@@ -646,8 +704,16 @@ poisson_seche_3 <- dplyr::mutate(poisson_seche, produit_code = 78)
 
 poissons_df_echvm <- poissons_renum_df |>
   dplyr::bind_rows(
+    # poisson frais
+    poisson_frais_5, poisson_frais_6, poisson_frais_7, poisson_frais_8,
+    poisson_frais_9, poisson_frais_10, poisson_frais_11,
+    # poisson fumé
+    poisson_fume_4, poisson_fume_5, poisson_fume_6, poisson_fume_7,
+    poisson_fume_8,
     # poisson séché
-    poisson_seche_1, poisson_seche_2, poisson_seche_3
+    poisson_seche_1, poisson_seche_2, poisson_seche_3, poisson_seche_4,
+    # crevettes
+    crevettes_fraiches_locales, crevettes_fraiches_importees
   )
 
 poissons_in_ehcvm3 <- poissons_df_echvm |>
@@ -696,14 +762,14 @@ laitier_renum_df <- laitier_df |>
   dplyr::filter(produit_code %in% laitier_renum_indices) |>
   dplyr::mutate(
     produit_code = dplyr::case_when(
-      produit_code == 52 ~ 87, # Lait frais type 1
-      produit_code == 174 ~ 88, # Lait frais type 2
-      produit_code == 54 ~ 91, # Lait concentré sucré
-      produit_code == 55 ~ 92, # Lait concentré non-sucré
-      produit_code == 56 ~ 93, # Lait en poudre
-      produit_code == 57 ~ 94, # Fromage
-      produit_code == 59 ~ 97, # Autres produits laitiers
-      produit_code == 60 ~ 98, # Œufs frais
+      produit_code == 52 ~ 119, # Lait frais type 1
+      produit_code == 174 ~ 120, # Lait frais type 2
+      produit_code == 54 ~ 123, # Lait concentré sucré
+      produit_code == 55 ~ 124, # Lait concentré non-sucré
+      produit_code == 56 ~ 125, # Lait en poudre
+      produit_code == 57 ~ 126, # Fromage
+      produit_code == 59 ~ 129, # Autres produits laitiers
+      produit_code == 60 ~ 130, # Œufs frais
       TRUE ~ produit_code
     )
   )
@@ -719,8 +785,8 @@ lait_yaourt <- dplyr::mutate(laitier_df, produit_code = 90)
 
 # lait et farines pour bébé -> lait pour bébé, farines pour bébé
 lait_farine <- dplyr::filter(laitier_df, produit_code == 58)
-lait_bebe <- dplyr::mutate(lait_farine, produit_code = 95)
-farine_bebe <- dplyr::mutate(lait_farine, produit_code = 96)
+lait_bebe <- dplyr::mutate(lait_farine, produit_code = 127)
+farine_bebe <- dplyr::mutate(lait_farine, produit_code = 128)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # rassembler le tout
@@ -783,17 +849,17 @@ huiles_renum_df <- huiles_df |>
   dplyr::filter(produit_code %in% huiles_renum_indices) |>
   dplyr::mutate(
     produit_code = dplyr::case_when(
-      produit_code == 61 ~ 99, # Beurre
-      produit_code == 62 ~ 100, # Beurre de karité
-      produit_code == 63 ~ 101, # Huile de palme brute
-      produit_code == 64 ~ 103, # Huile d'arachide raffinée
-      produit_code == 65 ~ 104, # Huile d'arachide 'Segal'
-      produit_code == 66 ~ 105, # Huile de soja
-      produit_code == 67 ~ 106, # Huile de coton
-      produit_code == 68 ~ 102, # Huile de palme raffinée
-      produit_code == 175 ~ 107, # Huile de karité
-      produit_code == 69 ~ 108, # Noix de palme
-      produit_code == 70 ~ 109, # Autres huiles alimentaires n.d.a. (maïs, pal…   
+      produit_code == 61 ~ 131, # Beurre
+      produit_code == 62 ~ 133, # Beurre de karité
+      produit_code == 63 ~ 134, # Huile de palme brute
+      produit_code == 68 ~ 135, # Huile de palme raffinée
+      produit_code == 175 ~ 140, # Huile de karité
+      produit_code == 64 ~ 136, # Huile d'arachide raffinée
+      produit_code == 65 ~ 137, # Huile d'arachide brute 'Segal'
+      produit_code == 66 ~ 138, # Huile de soja
+      produit_code == 67 ~ 139, # Huile de coton
+      produit_code == 69 ~ 143, # Noix de palme
+      produit_code == 70 ~ 144, # Autres huiles alimentaires n.d.a. (maïs, pa…
       TRUE ~ produit_code
     )
   )
@@ -802,13 +868,30 @@ huiles_renum_df <- huiles_df |>
 # créer de nouveaux produits
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-# N/A
+# nouveau produit temporaire
+huile_palme <- dplyr::filter(huiles_df, produit_code %in% c(63, 68)) |>
+  dplyr::distinct(unite_code, taille_code, .keep_all = TRUE) |>
+  dplyr::mutate(produit_code == 141)
+
+# huile d'olive est semblable à d'autres huiles
+huile_olive <- dplyr::filter(huiles_df, produit_code %in% c(66:68)) |>
+  dplyr::distinct(unite_code, taille_code, .keep_all = TRUE) |>
+  dplyr::mutate(produit_code == 142)
+
+# margarine hérite les unités du beurre
+margarine <- dplyr::filter(poissons_df, produit_code == 61) |>
+  dplyr::mutate(produit_code = 132)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # rassembler le tout
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-huiles_df_echvm <- huiles_renum_df
+huiles_df_echvm <- huiles_renum_df |>
+  dplyr::bind_rows(
+    huile_palme,
+    huile_olive,
+    margarine
+  )
 
 huiles_in_ehcvm3 <- huiles_df_echvm |>
   dplyr::distinct(produit_code) |>
@@ -861,22 +944,22 @@ fruits_renum_df <- fruits_df |>
   dplyr::filter(produit_code %in% fruits_renum_indices) |>
   dplyr::mutate(
     produit_code = dplyr::case_when(
-      produit_code == 71 ~ 110, # Mangue
-      produit_code == 72 ~ 111, # Ananas
-      produit_code == 73 ~ 112, # Orange
-      produit_code == 74 ~ 113, # Citron
-      produit_code == 76 ~ 116, # Banane douce
-      produit_code == 77 ~ 117, # Avocat
-      produit_code == 78 ~ 118, # Pastèque
-      produit_code == 79 ~ 119, # Melon
-      produit_code == 80 ~ 120, # Dattes
-      produit_code == 81 ~ 121, # Noix de coco
-      produit_code == 82 ~ 122, # Canne à sucre
-      produit_code == 83 ~ 123, # Pommes
-      produit_code == 84 ~ 124, # Papaye
-      produit_code == 176 ~ 125, # Goyave
-      produit_code == 85 ~ 126, # Fruit de baobab
-      produit_code == 86 ~ 127, # Néré
+      produit_code == 71 ~ 145, # Mangue
+      produit_code == 72 ~ 146, # Ananas
+      produit_code == 73 ~ 147, # Orange
+      produit_code == 74 ~ 148, # Citron
+      produit_code == 76 ~ 151, # Banane douce
+      produit_code == 77 ~ 152, # Avocat
+      produit_code == 78 ~ 153, # Pastèque
+      produit_code == 79 ~ 154, # Melon
+      produit_code == 80 ~ 155, # Dattes
+      produit_code == 81 ~ 156, # Noix de coco
+      produit_code == 82 ~ 157, # Canne à sucre
+      produit_code == 83 ~ 158, # Pommes
+      produit_code == 84 ~ 159, # Papaye
+      produit_code == 176 ~ 160, # Goyave
+      produit_code == 85 ~ 161, # Fruit de baobab (pain de singe)
+      produit_code == 86 ~ 162, # Néré
       TRUE ~ produit_code
     )
   )
@@ -887,13 +970,13 @@ fruits_renum_df <- fruits_df |>
 
 # autre agrumes -> mandarine, pamplemouse
 autres_agrumes <- dplyr::filter(fruits_df, produit_code == 75)
-madarine <- dplyr::mutate(autres_agrumes, produit_code = 114)
-pamplemousse <- dplyr::mutate(autres_agrumes, produit_code = 115)
+madarine <- dplyr::mutate(autres_agrumes, produit_code = 149)
+pamplemousse <- dplyr::mutate(autres_agrumes, produit_code = 150)
 
 # autre fruits -> distinction entre fruits locaux et importés
 autres_fruits <- dplyr::filter(fruits_df, produit_code == 87)
-autre_fruits_loc <- dplyr::mutate(autres_fruits, produit_code = 130)
-autre_fruits_imp <- dplyr::mutate(autres_fruits, produit_code = 131)
+autre_fruits_loc <- dplyr::mutate(autres_fruits, produit_code = 171)
+autre_fruits_imp <- dplyr::mutate(autres_fruits, produit_code = 172)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # rassembler le tout
@@ -949,7 +1032,6 @@ legumes_renum_indices <- c(
   99, # Gombo sec
   100, # Oignon frais
   177, # Champignon frais
-  101, # Ail
   102, # Feuilles locales 1
   103, # Feuilles locales 2
   104, # Feuilles locales 3
@@ -963,26 +1045,25 @@ legumes_renum_df <- legumes_df |>
   dplyr::filter(produit_code %in% legumes_renum_indices) |>
   dplyr::mutate(
     produit_code = dplyr::case_when(
-      produit_code == 88 ~ 132, # Salade (laitue)
-      produit_code == 89 ~ 133, # Choux
-      produit_code == 90 ~ 134, # Carotte
-      produit_code == 91 ~ 135, # Haricot vert
-      produit_code == 92 ~ 136, # Concombre
-      produit_code == 93 ~ 137, # Aubergine
-      produit_code == 95 ~ 141, # Poivron frais
-      produit_code == 96 ~ 142, # Tomate fraîche
-      produit_code == 97 ~ 143, # Tomate séchée
-      produit_code == 98 ~ 144, # Gombo frais
-      produit_code == 99 ~ 145, # Gombo sec
-      produit_code == 100 ~ 146, # Oignon frais
-      produit_code == 101 ~ 148, # Ail
-      produit_code == 102 ~ 149, # Feuilles locales 1
-      produit_code == 103 ~ 150, # Feuilles locales 2
-      produit_code == 104 ~ 151, # Feuilles locales 3
-      produit_code == 105 ~ 152, # Feuilles locales 4
-      produit_code == 106 ~ 153, # Autres légumes en feuilles
-      produit_code == 107 ~ 154, # Autre légumes frais n.d.a.
-      produit_code == 108 ~ 155, # Concentré de tomate
+      produit_code == 88 ~ 173, # Salade (laitue)
+      produit_code == 89 ~ 174, # Choux
+      produit_code == 90 ~ 175, # Carotte
+      produit_code == 91 ~ 176, # Haricot vert
+      produit_code == 92 ~ 177, # Concombre
+      produit_code == 93 ~ 178, # Aubergine
+      produit_code == 95 ~ 182, # Poivron frais
+      produit_code == 96 ~ 183, # Tomate fraîche
+      produit_code == 97 ~ 184, # Tomate séchée
+      produit_code == 98 ~ 185, # Gombo frais
+      produit_code == 99 ~ 186, # Gombo sec
+      produit_code == 100 ~ 188, # Oignon frais
+      produit_code == 102 ~ 190, # Feuille locale (fraîche ou séchée) 1
+      produit_code == 103 ~ 191, # Feuille locale (fraîche ou séchée) 2
+      produit_code == 104 ~ 192, # Feuille locale (fraîche ou séchée) 3
+      produit_code == 105 ~ 193, # Feuille locale (fraîche ou séchée) 4
+      produit_code == 106 ~ 201, # Autres légumes en feuilles
+      produit_code == 107 ~ 202, # Autre légumes frais n.d.a.
+      produit_code == 108 ~ 203, # Concentré de tomate
       TRUE ~ produit_code
     )
   )
@@ -993,12 +1074,23 @@ legumes_renum_df <- legumes_df |>
 
 # courge/courgette -> courge, courgette
 courge_courgette <- dplyr::filter(legumes_df, produit_code == 94)
-courge <- dplyr::mutate(courge_courgette, produit_code = 139)
-courgette <- dplyr::mutate(courge_courgette, produit_code = 140)
+courge <- dplyr::mutate(courge_courgette, produit_code = 180)
+courgette <- dplyr::mutate(courge_courgette, produit_code = 181)
 
 # aubergine -> aubergine, aubergine sauvage
 aubergine_sauvage <- dplyr::filter(legumes_df, produit_code == 93) |>
-  dplyr::mutate(produit_code = 138)
+  dplyr::mutate(produit_code = 179)
+
+# créer 7 postes supplémentaires pour les feuilles locales
+feuilles_locales <- dplyr::filter(legumes_df, produit_code %in% c(102:105)) |>
+  dplyr::distinct(unite_code, taille_code, .keep_all = TRUE)
+feuilles_loc_5 <- dplyr::mutate(feuilles_locales, produit_code = 194)
+feuilles_loc_6 <- dplyr::mutate(feuilles_locales, produit_code = 195)
+feuilles_loc_7 <- dplyr::mutate(feuilles_locales, produit_code = 196)
+feuilles_loc_8 <- dplyr::mutate(feuilles_locales, produit_code = 197)
+feuilles_loc_9 <- dplyr::mutate(feuilles_locales, produit_code = 198)
+feuilles_loc_10 <- dplyr::mutate(feuilles_locales, produit_code = 199)
+feuilles_loc_11 <- dplyr::mutate(feuilles_locales, produit_code = 200)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # rassembler le tout
@@ -1009,7 +1101,10 @@ legumes_df_echvm <- legumes_renum_df |>
     # courge/courgette
     courge, courgette,
     # aubergine
-    aubergine_sauvage
+    aubergine_sauvage,
+    # feuilles locales
+    feuilles_loc_5, feuilles_loc_6, feuilles_loc_7, feuilles_loc_8,
+    feuilles_loc_9, feuilles_loc_10, feuilles_loc_11
   )
 
 legumes_in_ehcvm3 <- legumes_df_echvm |>
@@ -1050,18 +1145,15 @@ leg_tub_renum_indices <- c(
   114, # Arachides séchées en coques
   115, # Arachides décortiquées
   116, # Arachides pilées
-  117, # Arachide grillée
   118, # Pâte d'arachide
-  119, # Fromage à base de soja      
+  119, # Fromage à base de soja     
   120, # Sésame
   121, # Noix de cajou
   122, # Noix de karité
-  123, # Manioc
-  124, # Igname
   125, # Plantain
   126, # Pomme de terre
   128, # Patate douce
-  129, # Autres tubercules n.d.a.    
+  129, # Autres tubercules n.d.a.
   130, # Farines de manioc
   178, # Pâte de manioc
   131, # Gari, tapioca
@@ -1073,31 +1165,28 @@ leg_tub_renum_df <- leg_tub_df |>
   dplyr::filter(produit_code %in% leg_tub_renum_indices) |>
   dplyr::mutate(
     produit_code = dplyr::case_when(
-      produit_code == 109 ~ 156, # Petits pois frais
-      produit_code == 110 ~ 157, # Petit pois secs
-      produit_code == 111 ~ 159, # Autres légumes secs n.d.a.
-      produit_code == 112 ~ 160, # Niébé/Haricots secs
-      produit_code == 113 ~ 163, # Arachides fraîches en coques
-      produit_code == 114 ~ 164, # Arachides séchées en coques
-      produit_code == 115 ~ 165, # Arachides décortiquées
-      produit_code == 116 ~ 166, # Arachides pilées
-      produit_code == 117 ~ 167, # Arachide grillée
-      produit_code == 118 ~ 168, # Pâte d'arachide
-      produit_code == 119 ~ 169, # Fromage à base de soja
-      produit_code == 120 ~ 170, # Sésame
-      produit_code == 121 ~ 171, # Noix de cajou
-      produit_code == 122 ~ 172, # Noix de karité
-      produit_code == 123 ~ 173, # Manioc
-      produit_code == 124 ~ 174, # Igname
-      produit_code == 125 ~ 175, # Plantain
-      produit_code == 126 ~ 177, # Pomme de terre
-      produit_code == 128 ~ 176, # Patate douce
-      produit_code == 129 ~ 180, # Autres tubercules n.d.a.
-      produit_code == 130 ~ 181, # Farines de manioc
-      produit_code == 178 ~ 182, # Pâte de manioc
-      produit_code == 131 ~ 183, # Gari, tapioca
-      produit_code == 132 ~ 184, # Attiéké
-      produit_code == 133 ~ 186, # Fruit de Kapokier
+      produit_code == 109 ~ 204, # Petits pois frais
+      produit_code == 110 ~ 205, # Petit pois secs
+      produit_code == 111 ~ 207, # Autres légumes secs n.d.a.
+      produit_code == 112 ~ 208, # Niébé/Haricots secs
+      produit_code == 113 ~ 212, # Arachides fraîches en coques
+      produit_code == 114 ~ 213, # Arachides séchées en coques
+      produit_code == 115 ~ 214, # Arachides décortiquées
+      produit_code == 116 ~ 215, # Arachides pilées
+      produit_code == 118 ~ 219, # Pâte d'arachide
+      produit_code == 119 ~ 220, # Fromage à base de soja
+      produit_code == 120 ~ 221, # Sésame
+      produit_code == 121 ~ 222, # Noix de cajou
+      produit_code == 122 ~ 223, # Noix de karité
+      produit_code == 125 ~ 228, # Plantain
+      produit_code == 126 ~ 230, # Pomme de terre
+      produit_code == 128 ~ 229, # Patate douce
+      produit_code == 129 ~ 234, # Autres tubercules n.d.a.
+      produit_code == 130 ~ 235, # Farine de manioc
+      produit_code == 178 ~ 236, # Pâte de manioc
+      produit_code == 131 ~ 240, # Gari, tapioca
+      produit_code == 132 ~ 241, # Attiéké
+      produit_code == 133 ~ 243, # Fruit de Kapokier
       TRUE ~ produit_code
     )
   )
@@ -1106,10 +1195,25 @@ leg_tub_renum_df <- leg_tub_df |>
 # créer de nouveaux produits
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+# arachides grillées -> ... en coques, ... décortiquées
+arachide_grillee <- dplyr::filter(leg_tub_df, produit_code == 117)
+arachide_grillee_coque <- dplyr::mutate(arachide_grillee, produit_code = 217)
+arachide_grillee_decortiquee <- dplyr::mutate(arachide_grillee, produit_code = 218)
+
+# manioc -> en tubercule, en cossettes
+manioc <- dplyr::filter(leg_tub_df, produit_code == 123)
+manioc_tubercule <- dplyr::mutate(manioc, produit_code = 224)
+manioc_cossettes <- dplyr::mutate(manioc, produit_code = 225)
+
+# igname -> jaune, blanche
+igname <- dplyr::filter(leg_tub_df, produit_code == 124)
+igname_jaune <- dplyr::mutate(igname, produit_code = 226)
+igname_blanche <- dplyr::mutate(igname, produit_code = 227)
+
 # taro/macabo -> taro, macabo
 taro_macabo <- dplyr::filter(leg_tub_df, produit_code == 127)
-taro <- dplyr::mutate(taro_macabo, produit_code = 178)
-macabo <- dplyr::mutate(taro_macabo, produit_code = 179)
+taro <- dplyr::mutate(taro_macabo, produit_code = 231)
+macabo <- dplyr::mutate(taro_macabo, produit_code = 232)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # rassembler le tout
@@ -1117,6 +1221,12 @@ macabo <- dplyr::mutate(taro_macabo, produit_code = 179)
 
 leg_tub_df_echvm <- leg_tub_renum_df |>
   dplyr::bind_rows(
+    # arachide grillée
+    arachide_grillee_coque, arachide_grillee_decortiquee,
+    # manioc
+    manioc_tubercule, manioc_cossettes,
+    # igname
+    igname_jaune, igname_blanche,
     # taro/macabo
     taro, macabo
   )
@@ -1154,7 +1264,6 @@ sucreries_renum_indices <- c(
   134, # Sucre en poudre
   135, # Sucre en morceaux
   136, # Miel
-  137, # Chocolat à croquer, pâte à tartiner
   138 # Caramel, bonbons, confiseries, etc.
 )
 
@@ -1162,11 +1271,10 @@ sucreries_renum_df <- sucreries_df |>
   dplyr::filter(produit_code %in% sucreries_renum_indices) |>
   dplyr::mutate(
     produit_code = dplyr::case_when(
-      produit_code == 134 ~ 187, # Sucre en poudre
-      produit_code == 135 ~ 188, # Sucre en morceaux
-      produit_code == 136 ~ 189, # Miel
-      produit_code == 137 ~ 190, # Chocolat à croquer, pâte à tartiner 
-      produit_code == 138 ~ 191, # Caramel, bonbons, confiseries, etc. 
+      produit_code == 134 ~ 244, # Sucre en poudre
+      produit_code == 135 ~ 245, # Sucre en morceaux
+      produit_code == 136 ~ 246, # Miel
+      produit_code == 138 ~ 250, # Caramel, bonbons, confiseries, etc.
       TRUE ~ produit_code
     )
   )
@@ -1175,7 +1283,20 @@ sucreries_renum_df <- sucreries_df |>
 # créer de nouveaux produits
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-sucreries_df_echvm <- sucreries_renum_df
+# chocolat -> à tartiner, à croquer
+chocolat <- dplyr::filter(sucreries_df, produit_code == 137)
+chocolat_tartiner <- dplyr::mutate(chocolat, produit_code == 248)
+chocolat_croquer <- dplyr::mutate(chocolat, produit_code == 249)
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# rassembler le tout
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+sucreries_df_echvm <- sucreries_renum_df |>
+  dplyr::bind_rows(
+    # chocolat
+    chocolat_tartiner, chocolat_croquer
+  )
 
 sucreries_in_ehcvm3 <- sucreries_df_echvm |>
   dplyr::distinct(produit_code) |>
@@ -1229,23 +1350,23 @@ epices_renum_df <- epices_df |>
   dplyr::filter(produit_code %in% epices_renum_indices) |>
   dplyr::mutate(
     produit_code = dplyr::case_when(
-      produit_code == 139 ~ 192, # Sel
-      produit_code == 140 ~ 193, # Piment séché
-      produit_code == 141 ~ 194, # Piment frais
-      produit_code == 142 ~ 195, # Gingembre frais
-      produit_code == 143 ~ 196, # Gingembre moulu
-      produit_code == 144 ~ 197, # Cube alimentaire (Maggi, Jumbo, )
-      produit_code == 145 ~ 198, # Arôme (Maggi, Jumbo, etc.)
-      produit_code == 146 ~ 199, # Soumbala (moutarde africaine)
-      produit_code == 147 ~ 200, # Mayonnaise
-      produit_code == 148 ~ 203, # Vinaigre de citron
-      produit_code == 149 ~ 204, # Autres vinaigres
-      produit_code == 150 ~ 205, # Moutarde
-      produit_code == 151 ~ 206, # Poivre
-      produit_code == 179 ~ 207, # Poisson séché en condiment
-      produit_code == 152 ~ 208, # Autres condiments (poivre etc.)
-      produit_code == 153 ~ 209, # Noix de cola
-      produit_code == 154 ~ 214, # Autres produits alimentaires (noix de pomme s… 
+      produit_code == 139 ~ 251, # Sel
+      produit_code == 140 ~ 252, # Piment séché
+      produit_code == 141 ~ 253, # Piment frais
+      produit_code == 142 ~ 254, # Gingembre frais
+      produit_code == 143 ~ 255, # Gingembre moulu
+      produit_code == 144 ~ 258, # Cube alimentaire (Maggi, Jumbo, )
+      produit_code == 145 ~ 259, # Arôme (Maggi, Jumbo, etc.)
+      produit_code == 146 ~ 260, # Soumbala (moutarde africaine)
+      produit_code == 147 ~ 261, # Mayonnaise
+      produit_code == 148 ~ 264, # Vinaigre de citron
+      produit_code == 149 ~ 265, # Autres vinaigres
+      produit_code == 150 ~ 266, # Moutarde
+      produit_code == 151 ~ 267, # Poivre
+      produit_code == 179 ~ 268, # Poisson séché en condiment
+      produit_code == 152 ~ 272, # Autres condiments (persil, céléri, etc.)
+      produit_code == 153 ~ 273, # Noix de cola
+      produit_code == 154 ~ 275, # Autres produits alimentaires (noix de pomme …
       TRUE ~ produit_code
     )
   )
@@ -1254,9 +1375,14 @@ epices_renum_df <- epices_df |>
 # créer de nouveaux produits
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+# vinaigres
 autre_vinaigres <- dplyr::filter(epices_df, produit_code == 149)
 vinaigre_vin <- dplyr::mutate(autre_vinaigres, produit_code = 201)
 vinaigre_alcool <- dplyr::mutate(autre_vinaigres, produit_code = 202)
+
+# ail
+ail <- dplyr::filter(legumes_df, produit_code == 101) |>
+  dplyr::mutate(produit_code = 256)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # rassembler le tout
@@ -1265,7 +1391,9 @@ vinaigre_alcool <- dplyr::mutate(autre_vinaigres, produit_code = 202)
 epices_df_echvm <- epices_renum_df |>
 	dplyr::bind_rows(
     # viagres
-    vinaigre_vin, vinaigre_alcool
+    vinaigre_vin, vinaigre_alcool,
+    # ail
+    ail
   )
 
 epices_in_ehcvm3 <- epices_df_echvm |>
@@ -1300,7 +1428,6 @@ boissons_df <- tableaux_df |>
 boissons_renum_indices <- c(
   158, # Chocolat en poudre
   159, # Autres tisanes et infusions n.d.a. (quinqueliba, citronnelle, etc.)
-  161, # Eau minérale/ filtrée
   162, # Boissons gazeuses (Coca, Fanta, Vimto, Sprite, etc.)
   163, # Jus en poudre
   164, # Bières et vins traditionnels (dolo, vin de pa…      
@@ -1311,13 +1438,12 @@ boissons_renum_df <- boissons_df |>
   dplyr::filter(produit_code %in% boissons_renum_indices) |>
   dplyr::mutate(
     produit_code = dplyr::case_when(
-      produit_code == 158 ~ 219, # Chocolat en poudre
-      produit_code == 159 ~ 220, # Autres tisanes et infusions n.d.a. (quinquel…
-      produit_code == 161 ~ 221, # Eau minérale/ filtrée
-      produit_code == 162 ~ 224, # Boissons gazeuses (Coca, Fanta, Vimto, Sprit…
-      produit_code == 163 ~ 226, # Jus en poudre
-      produit_code == 164 ~ 227, # Bières et vins traditionnels (dolo, vin de pa…
-      produit_code == 165 ~ 228, # Bières industrielles
+      produit_code == 158 ~ 280, # Chocolat soluble en poudre
+      produit_code == 159 ~ 281, # Autres tisanes et infusions n.d.a. (quinquel…
+      produit_code == 162 ~ 287, # Boissons gazeuses (Coca, Fanta, Vimto, Sprit…
+      produit_code == 163 ~ 289, # Jus en poudre
+      produit_code == 164 ~ 290, # Bières et vins traditionnels (dolo, vin de pa…
+      produit_code == 165 ~ 291, # Bières industrielles
       TRUE ~ produit_code
     )
   )
@@ -1326,23 +1452,33 @@ boissons_renum_df <- boissons_df |>
 # créer de nouveaux produits
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+# café
 cafe <-  boissons_df |>
   dplyr::filter(produit_code %in% c(155, 156)) |>
   dplyr::distinct(produit_code, unite_code, taille_code, .keep_all = TRUE)
-cafe_en_poudre_soluble <- dplyr::mutate(cafe, produit_code = 215)
-cafe_moulu <- dplyr::mutate(cafe, produit_code = 216)
+cafe_en_poudre_soluble <- dplyr::mutate(cafe, produit_code = 276)
+cafe_moulu <- dplyr::mutate(cafe, produit_code = 277)
 
+# thé
 the <- dplyr::filter(boissons_df, produit_code %in% c(157, 180))
-the_en_sachet <- dplyr::mutate(the, produit_code = 217)
-the_en_feuille <- dplyr::mutate(the, produit_code = 218)
+the_en_sachet <- dplyr::mutate(the, produit_code = 278)
+the_en_feuille <- dplyr::mutate(the, produit_code = 279)
 
+# eau minérale/filtrée -> sous-variantes
+eau_min_fil <- dplyr::filter(boissons_df, produit_code == 161)
+eau_min_fil_locale <- dplyr::mutate(eau_min_fil, produit_code == 282)
+eau_min_fil_importee <- dplyr::mutate(eau_min_fil, produit_code == 283)
+eau_min_fil_sachet <- dplyr::mutate(eau_min_fil, produit_code == 284)
+
+# jus de fruit
 jus_de_fruits <- dplyr::filter(boissons_df, produit_code == 160)
-jus_de_fruits_1 <- dplyr::mutate(jus_de_fruits, produit_code = 222)
-jus_de_fruits_2 <- dplyr::mutate(jus_de_fruits, produit_code = 223)
+jus_de_fruits_1 <- dplyr::mutate(jus_de_fruits, produit_code = 285)
+jus_de_fruits_2 <- dplyr::mutate(jus_de_fruits, produit_code = 286)
 
+# boissons énergisantes hérite des boissons gazeuses
 boissons_energisantes <- boissons_df |>
   dplyr::filter(produit_code == 162) |>
-  dplyr::mutate(produit_code = 225)
+  dplyr::mutate(produit_code = 288)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # rassembler le tout
@@ -1354,6 +1490,8 @@ boissons_df_echvm <- boissons_renum_df |>
     cafe_en_poudre_soluble, cafe_moulu,
     # the
     the_en_sachet, the_en_feuille,
+    # eau minérale/filtrée
+    eau_min_fil_locale, eau_min_fil_importee, eau_min_fil_sachet,
     # jus de fruit
     jus_de_fruits_1, jus_de_fruits_2,
     # boissons energisantes
