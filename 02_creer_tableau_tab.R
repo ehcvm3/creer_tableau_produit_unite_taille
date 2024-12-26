@@ -240,15 +240,15 @@ if (any(is.na(tableau_df$unite_code)) || any(is.na(tableau_df$taille_code))) {
 
 # faire l'inventaire des produits à adapter par les INS
 produits_a_adapter <- c(
-  "Riz local [1-3]",
+  "Riz local type [1-2]",
   "Riz importé [1-3]",
   "Pain moderne type [1-2]",
   "Pain traditionnel type [1-2]",
-  "Poisson frais type [1-4]",
-  "Poisson fumé type [1-3]",
-  "Poisson séché type [1-3]",
-  "Lait frais type [1-3]",
-  "Feuilles locales [1-4]",
+  "Poisson frais type [0-9]{1,2}",
+  "Poisson fumé type [1-8]",
+  "Poisson séché ou salé type [1-4]",
+  "Lait frais type [1-2]",
+  "Feuille locale (fraîche ou séchée) [0-9]{1,2}",
   "Jus de fruits type [1-2]"
 )
 
