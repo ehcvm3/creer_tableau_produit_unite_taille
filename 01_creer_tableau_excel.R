@@ -853,13 +853,13 @@ huiles_renum_df <- huiles_df |>
       produit_code == 62 ~ 133, # Beurre de karité
       produit_code == 63 ~ 134, # Huile de palme brute
       produit_code == 68 ~ 135, # Huile de palme raffinée
-      produit_code == 175 ~ 140, # Huile de karité
       produit_code == 64 ~ 136, # Huile d'arachide raffinée
       produit_code == 65 ~ 137, # Huile d'arachide brute 'Segal'
       produit_code == 66 ~ 138, # Huile de soja
       produit_code == 67 ~ 139, # Huile de coton
+      produit_code == 175 ~ 140, # Huile de karité
       produit_code == 69 ~ 143, # Noix de palme
-      produit_code == 70 ~ 144, # Autres huiles alimentaires n.d.a. (maïs, pa…
+      produit_code == 70 ~ 144, # Autres huiles alimentaires n.d.a. (maïs, to…
       TRUE ~ produit_code
     )
   )
@@ -868,8 +868,8 @@ huiles_renum_df <- huiles_df |>
 # créer de nouveaux produits
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-# nouveau produit temporaire
-huile_palme <- dplyr::filter(huiles_df, produit_code %in% c(63, 68)) |>
+# huile de palmiste
+huile_palmiste <- dplyr::filter(huiles_df, produit_code == 70) |>
   dplyr::distinct(unite_code, taille_code, .keep_all = TRUE) |>
   dplyr::mutate(produit_code == 141)
 
@@ -888,7 +888,7 @@ margarine <- dplyr::filter(poissons_df, produit_code == 61) |>
 
 huiles_df_echvm <- huiles_renum_df |>
   dplyr::bind_rows(
-    huile_palme,
+    huile_palmiste,
     huile_olive,
     margarine
   )
