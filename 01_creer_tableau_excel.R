@@ -2,6 +2,36 @@
 # installer les packages requis
 # ==============================================================================
 
+# ------------------------------------------------------------------------------
+# confirmer que RTools est installé
+# ------------------------------------------------------------------------------
+
+# installer `{here}` si le package est absent
+if (!base::require("pkgbuild", quietly = TRUE)) {
+  install.packages("pkgbuild")
+}
+
+if (pkgbuild::has_build_tools() == FALSE) {
+
+  url_rtools <- "https://github.com/ehcvm3/creer_tableau_produit_unite_taille?tab=readme-ov-file#rtools"
+
+  cli::cli_abort(
+    message = c(
+      "x" = "RTools est introuvable. Veuillez l'installer.",
+      "i" = "Sur Windows, R a besoin d'un outil pour compiler le code source.",
+      "i" = paste0(
+        "Veuillez suivre les instructions ici pour installer RTools : ",
+        "{.url {url_rtools}}"
+      )
+    )
+  )
+
+}
+
+# ------------------------------------------------------------------------------
+# installer les packages nécessaires
+# ------------------------------------------------------------------------------
+
 # installer `{here}` si le package est absent
 if (!base::require("here", quietly = TRUE)) {
   install.packages("here")
