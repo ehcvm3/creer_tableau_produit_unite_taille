@@ -38,6 +38,25 @@ if (!base::require("here", quietly = TRUE)) {
 }
 source(here::here("R", "01_install_requirements.R"))
 
+# ------------------------------------------------------------------------------
+# confirmer que Quarto est installé
+# ------------------------------------------------------------------------------
+
+if (is.null(quarto::quarto_path())) {
+
+  url_quarto <- "https://quarto.org/docs/get-started/"
+
+  cli::cli_abort(
+    message = c(
+      "x" = "Quarto est introuvable. Veuillez l'installer.",
+      "i" = "Pour créer une sortie, le programme a besoin de Quarto.",
+      "i" = "Pour l'installer, suivre les instructions ici : ",
+      "{.url {url_quarto}}"
+    )
+  )
+
+}
+
 # ==============================================================================
 # valider les entrées du programme
 # ==============================================================================
