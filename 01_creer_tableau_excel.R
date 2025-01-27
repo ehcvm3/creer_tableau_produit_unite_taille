@@ -324,57 +324,90 @@ produits_lbls_ehcvm3 <- stats::setNames(
 
 cereales_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "CÉRÉALES ET PAINS"
+  food_group = c(
+    "CÉRÉALES ET PAINS",
+    "CEREAIS E PÃES"
+  )
 )
 
 viandes_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "VIANDE"
+  food_group = c(
+    "VIANDE",
+    "CARNE"
+  )
 )
 
 poissons_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "POISSON ET FRUITS DE MER"
+  food_group = c(
+    "POISSON ET FRUITS DE MER",
+    "PEIXES E MARISCOS"
+  )
 )
 
 laitier_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "LAIT, FROMAGE ET OEUFS"
+  food_group = c(
+    "LAIT, FROMAGE ET OEUFS",
+    "LEITE, QUEIJO E OVOS"
+  )
 )
 
 huiles_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "HUILES ET GRAISSES"
+  food_group = c(
+    "HUILES ET GRAISSES",
+    "ÓLEOS E GORDURAS"
+  )
 )
 
 fruits_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "FRUITS"
+  food_group = c(
+    "FRUITS",
+    "FRUTAS"
+  )
 )
 
 legumes_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "LÉGUMES"
+  food_group = c(
+    "LÉGUMES",
+    "LEGUMES E VEGETAIS"
+  )
 )
 
 leg_tub_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "LEGUMINEUSES ET TUBERCULES"
+  food_group = c(
+    "LEGUMINEUSES ET TUBERCULES",
+    "LEGUMINOSAS E TUBÉRCULOS"
+  )
 )
 
 sucreries_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "SUCRE, MIEL, CHOCOLAT ET CONFISERIE"
+  food_group = c(
+    "SUCRE, MIEL, CHOCOLAT ET CONFISERIE",
+    "AÇÚCAR, MEL, CHOCOLATE E CONFEITARIA"
+  )
 )
 
 epices_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "EPICES, CONDIMENTS ET AUTRES"
+  food_group = c(
+    "EPICES, CONDIMENTS ET AUTRES",
+    "ESPECIARIAS, CONDIMENTOS E OUTROS"
+  )
 )
 
 boissons_ehcvm3 <- get_products_for_food_group(
   product_df = produits,
-  food_group = "BOISSONS"
+  food_group = c(
+    "BOISSONS",
+    "BEBIDAS"
+  )
 )
 
 # ==============================================================================

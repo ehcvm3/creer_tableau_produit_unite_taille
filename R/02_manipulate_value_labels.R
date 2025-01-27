@@ -71,7 +71,8 @@ construct_values_labels <- function(
 #' Get product codes for EHCVM3 food group
 #'
 #' @param product_df Data frame. Data gleaned from EHCVM3 Excel questionnaire.
-#' @param food_group Character. Food group name.
+#' @param food_group Character vector. Food group names in EHCVM languages.
+#' For the moment, French and Portuguese.
 #'
 #' @importFrom dplyr filter pull
 get_products_for_food_group <- function(
@@ -80,7 +81,7 @@ get_products_for_food_group <- function(
 ) {
 
   prods_ehcvm3 <- product_df |>
-    dplyr::filter(type_produit == food_group) |>
+    dplyr::filter(type_produit %in% food_group) |>
     dplyr::pull(produit_code)
 
 }
